@@ -1,13 +1,16 @@
 // app/stories/page.jsx
 import React from 'react';
+import Link from 'next/link';
 
 export default async function Stories() {
   const apiKey = process.env.NEWSAPI_API_KEY;
   const res = await fetch(
-    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`
+    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`,
+    { cache: 'no-store' }
   );
   const data = await res.json();
   const articles = data.articles || [];
+  
 
   return (
     <div style={styles.container}>
@@ -36,6 +39,16 @@ export default async function Stories() {
               {new Date(article.publishedAt).toLocaleString()} -{' '}
               {article.source.name}
             </small>
+            <div style={styles.buttonContainer}>
+              <Link href={`/summary?articleUrl=${encodeURIComponent(article.url)}`}>
+                <button style={styles.summaryButton}>Summary</button>
+              </Link>
+
+              <Link href={`/chat?articleTitle=${encodeURIComponent(article.title)}&articleAuthor=${encodeURIComponent(article.author)}`}>
+                <button style={styles.chatButton}>Chat</button>
+              </Link>
+              
+            </div>
           </div>
         </div>
       ))}
@@ -53,7 +66,7 @@ const styles = {
   card: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#fff',
     marginBottom: '0.5rem',
     padding: '0.5rem',
@@ -87,5 +100,35 @@ const styles = {
   meta: {
     fontSize: '0.7rem',
     color: '#666',
+  },
+  buttonContainer: {
+    marginTop: '0.5rem',
+    display: 'flex',
+    gap: '0.5rem',
+  },
+  summaryButton: {
+    flex: 1,
+    padding: '0.4rem 0.8rem',
+    fontSize: '0.8rem',
+    backgroundColor: '#0070f3',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  },
+  buttonContainer: {
+    marginTop: '0.5rem',
+    display: 'flex',
+    gap: '0.5rem',
+  },
+  chatButton: {
+    flex: 1,
+    padding: '0.4rem 0.8rem',
+    fontSize: '0.8rem',
+    backgroundColor: '#00a884',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
   },
 };
