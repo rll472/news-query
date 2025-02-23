@@ -1,59 +1,62 @@
-import { createRequire } from 'module';
+// app/api/summary/route.ts
+
+export const config = {
+  runtime: "nodejs",
+};
+
+import { NextRequest } from "next/server";
+import { OpenAI } from "openai";
+import { supabase } from "../../lib/supabaseClient";
+
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(request) {
   try {
-    console.log("Received summary request.");
+    // Parse the request body which should include articleUrl and context
+    const { articleUrl, context } = await request.json();
 
-    // Parse the request body
-    const { articleUrl } = await request.json();
-    console.log("Article URL received:", articleUrl);
+    // Query the database for the article by URL
+    const { data: article, error: dbError } = await supabase
+    .from("articles")
+    .select("content, title, author")
+    .eq("url", articleUrl)
+    .maybeSingle();
 
-    // Construct an excerpt or snippet of the article
-    const articleContent = `Here is the content (or excerpt) of the article from: ${articleUrl}`;
-    console.log("Article content prepared:", articleContent);
 
-    // Use createRequire to import the OpenAI module via CommonJS
-    const require = createRequire(import.meta.url);
-    const openaiModule = require("openai");
-    console.log("OpenAI module imported via require:", openaiModule);
+    if (dbError) throw new Error(dbError.message);
+    if (!article) throw new Error("Article not found in the database.");
 
-    if (!openaiModule || !openaiModule.Configuration || !openaiModule.OpenAIApi) {
-      throw new Error("Failed to import OpenAI module constructors using require.");
-    }
-
-    const { Configuration, OpenAIApi } = openaiModule;
-
-    // Initialize the OpenAI client
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
-    console.log("OpenAI client initialized.");
+    // Use the content from the database
+    const articleContent = article.content;
 
     // Build the prompt for summarization
-    const prompt = `Using the following article text in three concise sentences:\n\n${articleContent}`;
-    console.log("Prompt for OpenAI:", prompt);
+    const prompt = `Summarize the following article in three concise sentences:
+Article Title: ${article.title || context.articleTitle || "Unknown Title"}
+Article Author: ${article.author || context.articleAuthor || "Unknown Author"}
+Article Content:
+${articleContent || "No article content available."}`;
 
-    // Call the OpenAI API
-    const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt,
+    // Call OpenAI's Chat Completions API
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "system", content: prompt }],
       max_tokens: 150,
     });
-    console.log("OpenAI response:", completion.data);
 
-    const summary = completion.data.choices[0].text.trim();
-    console.log("Generated summary:", summary);
+    const summary = completion.choices[0].message.content.trim();
 
     return new Response(JSON.stringify({ summary }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     console.error("Error in summary API route:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   }
 }
