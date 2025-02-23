@@ -17,6 +17,7 @@ export async function POST(request) {
   try {
     // Parse the request body which should include articleUrl and context
     const { articleUrl, context } = await request.json();
+    console.log("Article URL received:", articleUrl);
 
     // Query the database for the article by URL
     const { data: article, error: dbError } = await supabase
@@ -24,6 +25,7 @@ export async function POST(request) {
     .select("content, title, author")
     .eq("url", articleUrl)
     .maybeSingle();
+    console.log("Database article:", article);
 
 
     if (dbError) throw new Error(dbError.message);
@@ -33,11 +35,13 @@ export async function POST(request) {
     const articleContent = article.content;
 
     // Build the prompt for summarization
-    const prompt = `Summarize the following article in three concise sentences:
-Article Title: ${article.title || context.articleTitle || "Unknown Title"}
-Article Author: ${article.author || context.articleAuthor || "Unknown Author"}
-Article Content:
-${articleContent || "No article content available."}`;
+    // Build the prompt for summarization
+    const prompt = `Summarize the following article with only the most relevant information' :
+    Article Title: ${article.title || context?.articleTitle || "Unknown Title"}
+    Article Author: ${article.author || context?.articleAuthor || "Unknown Author"}
+    Article Content:
+    ${articleContent || "No article content available."}`;
+
 
     // Call OpenAI's Chat Completions API
     const completion = await openai.chat.completions.create({

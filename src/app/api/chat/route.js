@@ -6,7 +6,7 @@ export const config = {
 
 import { NextRequest } from 'next/server';
 import { OpenAI } from 'openai';
-import { supabase } from '../lib/supabaseClient';
+import { supabase } from '../../lib/supabaseClient';
 
 // Initialize the OpenAI client
 const openai = new OpenAI({
@@ -36,19 +36,16 @@ export async function POST(request) {
     const messages = [
       {
         role: 'system',
-        content: `Below is the article information:
-Article Title: ${article.title || context.articleTitle || 'Unknown Title'}
-Article Author: ${article.author || context.articleAuthor || 'Unknown Author'}
-Article Content:
-${articleContent || 'No article content available.'}
-
-Please use this information to answer the following question.`,
+        content: `You are a news assistant. The following is the content of a news article. Use only this information to answer the user's question. Do not incorporate any outside knowledge.
+        
+    Article:
+    ${articleContent || "No article content available."}`
       },
       {
         role: 'user',
-        content: `User question: ${message}`,
+        content: message,  // The user's question
       },
-    ];
+    ];    
 
     // Call the Chat Completions API.
     const completion = await openai.chat.completions.create({
