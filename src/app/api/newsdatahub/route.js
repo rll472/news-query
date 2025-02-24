@@ -2,7 +2,7 @@
 
 export const config = { runtime: "nodejs" };
 
-export async function GET(request) {
+export async function GET() {
   try {
     const apiKey = process.env.NEXT_PUBLIC_NEWSAPI_API_KEY;
     const url = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=us`;

@@ -4,7 +4,6 @@ export const config = {
   runtime: 'nodejs',
 };
 
-import { NextRequest } from 'next/server';
 import { OpenAI } from 'openai';
 import { supabase } from '../../lib/supabaseClient';
 
