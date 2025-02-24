@@ -4,7 +4,7 @@ export const config = { runtime: "nodejs" };
 
 import { supabase } from "../../lib/supabaseClient";
 
-export async function GET(request) {
+export async function GET() {
   try {
     // Query the database for all articles; you can adjust filtering or ordering as needed
     const { data: articles, error } = await supabase
