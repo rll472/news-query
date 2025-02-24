@@ -50,19 +50,22 @@ export async function POST(request) {
       // Optionally, you can choose to skip this article or proceed without content.
     }
 
+    const { title, textContent } = article; // article is the parsed object from Readability
+    const extractedContent = content || textContent || "";
+    const source = new URL(url).hostname;
+    const published_at = new Date().toISOString();
+    const image_url = article.urlToImage || null;
+    console.log("Image URL:", image_url);
+
     // Insert new article record into the database
-    const { data: inserted, error: insertError } = await supabase
-    .from("articles")
-    .insert([
-    {
-      url: url,
-      title: article.title || null,
-      author: Array.isArray(article.creator) ? article.creator.join(', ') : article.creator || null,
-      source: article.source_name || null,
-      published_at: article.pubDate || null,
-      content: content,
-    },
-    ]);
+    const { data, error: insertError } = await supabase.from('articles').insert([{
+      url,
+      title,
+      source,
+      published_at,
+      content: extractedContent,
+      image_url,
+    }]);  
 
 
     if (insertError) {
@@ -71,7 +74,7 @@ export async function POST(request) {
         JSON.stringify({ error: insertError.message }),
         { status: 500, headers: { "Content-Type": "application/json" } }
       );
-    }
+    }    
 
     return new Response(
       JSON.stringify({
