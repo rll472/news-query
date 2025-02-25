@@ -1,6 +1,5 @@
 // app/api/chat/route.js
 
-
 export const config = {
   runtime: 'nodejs',
 };
@@ -16,15 +15,15 @@ const openai = new OpenAI({
 export async function POST(request) {
   try {
     // Parse the request body; expect a JSON payload with:
-    // message (user question), context (e.g. article title/author), and articleUrl.
-    const { message, _context, articleUrl } = await request.json();
+    // message (user question) and articleUrl.
+    const { message, articleUrl } = await request.json();
 
     // Query the database for the article by URL.
     const { data: article, error: dbError } = await supabase
-    .from("articles")
-    .select("content, title, author")
-    .eq("url", articleUrl)
-    .maybeSingle();
+      .from("articles")
+      .select("content, title, author")
+      .eq("url", articleUrl)
+      .maybeSingle();
 
     if (dbError) throw new Error(dbError.message);
     if (!article) throw new Error('Article not found in the database.');
@@ -38,14 +37,14 @@ export async function POST(request) {
         role: 'system',
         content: `You are a news assistant. The following is the content of a news article. Use only this information to answer the user's question. Do not incorporate any outside knowledge.
         
-    Article:
-    ${articleContent || "No article content available."}`
+Article:
+${articleContent || "No article content available."}`,
       },
       {
         role: 'user',
-        content: message,  // The user's question
+        content: message,
       },
-    ];    
+    ];
 
     // Call the Chat Completions API.
     const completion = await openai.chat.completions.create({
@@ -62,7 +61,6 @@ export async function POST(request) {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-
     console.error('Error in chat API route:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
