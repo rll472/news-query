@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function SummaryPage() {
+function SummaryContent() {
   const searchParams = useSearchParams();
   const articleUrl = searchParams.get('articleUrl'); // expects ?articleUrl=...
   const [summary, setSummary] = useState('');
@@ -18,9 +18,9 @@ export default function SummaryPage() {
         const res = await fetch('/api/summary', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ articleUrl })
+          body: JSON.stringify({ articleUrl }),
         });
         if (!res.ok) {
           throw new Error('Failed to fetch summary');
@@ -50,5 +50,13 @@ export default function SummaryPage() {
         <p>{summary}</p>
       )}
     </div>
+  );
+}
+
+export default function SummaryPage() {
+  return (
+    <Suspense fallback={<div>Loading summary page...</div>}>
+      <SummaryContent />
+    </Suspense>
   );
 }
