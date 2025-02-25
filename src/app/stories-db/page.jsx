@@ -30,9 +30,9 @@ export default function StoriesDB() {
     <div style={styles.container}>
       {articles.map((article, index) => (
         <div key={article.url || index} style={styles.card}>
-          {article.urlToImage && (
+          {article.image_url && (
             <img
-              src={article.urlToImage}
+              src={article.image_url}
               alt={article.title}
               style={styles.thumbnail}
             />
