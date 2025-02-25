@@ -16,7 +16,7 @@ export async function POST(request) {
   try {
     // Parse the request body; expect a JSON payload with:
     // message (user question), context (e.g. article title/author), and articleUrl.
-    const { message, articleUrl } = await request.json();
+    const { message, context, articleUrl } = await request.json();
 
     // Query the database for the article by URL.
     const { data: article, error: dbError } = await supabase
