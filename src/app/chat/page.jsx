@@ -1,158 +1,168 @@
 "use client";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
 
-export default function ChatPage() {
+import React, { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+
+function ChatContent() {
   const searchParams = useSearchParams();
+  const articleUrl = searchParams.get("articleUrl") || "";
   const articleTitle = searchParams.get("articleTitle") || "Unknown Title";
   const articleAuthor = searchParams.get("articleAuthor") || "Unknown Author";
-  const articleUrl = searchParams.get("articleUrl");
 
-  // State for the conversation messages, current input, and loading state
-  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
 
-  async function handleSend() {
+  async function handleChatSubmit(e) {
+    e.preventDefault();
     if (!input.trim()) return;
-    setLoading(true);
-    // Add the user message to the conversation
+
+    // Append the user's message
     setMessages((prev) => [...prev, { role: "user", content: input }]);
+    const userMessage = input;
+    setInput("");
+
+    // Append a temporary assistant placeholder message
+    setMessages((prev) => [...prev, { role: "assistant", content: "..." }]);
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: input,
-          context: { articleTitle, articleAuthor },
-          articleUrl, // Ensure this is passed from the URL query
-        }),
+        body: JSON.stringify({ message: userMessage, articleUrl }),
       });
       const data = await res.json();
-      const assistantMessage = data.response || data.error;
-      // Append the assistant's response
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: assistantMessage },
-      ]);
-    } catch (error) {
-      console.error("Error sending message:", error);
-    } finally {
-      setLoading(false);
-      setInput("");
+
+      setMessages((prev) => {
+        // Remove the temporary placeholder
+        const updated = prev.slice(0, -1);
+        // Append the real assistant response or error
+        const responseContent = res.ok
+          ? data.response
+          : "Error: " + data.error;
+        return [...updated, { role: "assistant", content: responseContent }];
+      });
+    } catch (err) {
+      setMessages((prev) => {
+        const updated = prev.slice(0, -1);
+        return [
+          ...updated,
+          { role: "assistant", content: "Error: " + err.message },
+        ];
+      });
     }
   }
 
   return (
     <div style={styles.container}>
-      {/* Header with article title and author */}
       <header style={styles.header}>
-        <h1 style={styles.title}>{articleTitle}</h1>
-        <p style={styles.author}>By {articleAuthor}</p>
+        <h1 style={styles.title}>Chat about {articleTitle}</h1>
+        <p style={styles.meta}>
+          <strong>Author:</strong> {articleAuthor} •{" "}
+          <strong>URL:</strong> {articleUrl}
+        </p>
       </header>
-      {/* Chat conversation container */}
-      <div style={styles.chatContainer}>
+      <div style={styles.chatWindow}>
         {messages.map((msg, index) => (
           <div
             key={index}
             style={
-              msg.role === "assistant"
-                ? styles.assistantMessage
-                : styles.userMessage
+              msg.role === "user"
+                ? styles.userBubble
+                : styles.assistantBubble
             }
           >
             {msg.content}
           </div>
         ))}
-        {loading && <p style={styles.loading}>Loading response...</p>}
       </div>
-      {/* Input field and Send button */}
-      <div style={styles.inputContainer}>
+      <form onSubmit={handleChatSubmit} style={styles.form}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your question..."
           style={styles.input}
-          placeholder="Ask a question..."
         />
-        <button onClick={handleSend} style={styles.sendButton}>
+        <button type="submit" style={styles.button}>
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
 }
 
 const styles = {
   container: {
+    maxWidth: "800px",
+    margin: "0 auto",
     display: "flex",
     flexDirection: "column",
     height: "100vh",
     padding: "1rem",
   },
   header: {
-    borderBottom: "1px solid #ccc",
-    paddingBottom: "1rem",
     marginBottom: "1rem",
   },
   title: {
     margin: 0,
     fontSize: "1.5rem",
   },
-  author: {
-    margin: 0,
+  meta: {
+    fontSize: "0.9rem",
     color: "#666",
   },
-  chatContainer: {
+  chatWindow: {
     flex: 1,
     overflowY: "auto",
     padding: "1rem",
-    backgroundColor: "#f2f2f2",
-    borderRadius: "4px",
+    backgroundColor: "#f7f7f8",
+    borderRadius: "8px",
     marginBottom: "1rem",
     display: "flex",
     flexDirection: "column",
   },
-  userMessage: {
+  userBubble: {
     alignSelf: "flex-end",
-    backgroundColor: "#0070f3",
-    color: "#fff",
-    padding: "0.5rem 1rem",
-    borderRadius: "12px",
-    marginBottom: "0.5rem",
-    maxWidth: "80%",
+    backgroundColor: "#0084ff",
+    color: "white",
+    padding: "0.75rem 1rem",
+    borderRadius: "16px",
+    margin: "0.5rem 0",
+    maxWidth: "70%",
   },
-  assistantMessage: {
+  assistantBubble: {
     alignSelf: "flex-start",
-    backgroundColor: "#e2e2e2",
-    color: "#000",
-    padding: "0.5rem 1rem",
-    borderRadius: "12px",
-    marginBottom: "0.5rem",
-    maxWidth: "80%",
+    backgroundColor: "#e5e5ea",
+    color: "black",
+    padding: "0.75rem 1rem",
+    borderRadius: "16px",
+    margin: "0.5rem 0",
+    maxWidth: "70%",
   },
-  loading: {
-    alignSelf: "center",
-    color: "#666",
-  },
-  inputContainer: {
+  form: {
     display: "flex",
   },
   input: {
     flex: 1,
-    padding: "0.5rem",
-    fontSize: "1rem",
-    borderRadius: "4px",
+    padding: "0.75rem",
+    borderRadius: "20px",
     border: "1px solid #ccc",
     marginRight: "0.5rem",
   },
-  sendButton: {
-    padding: "0.5rem 1rem",
-    fontSize: "1rem",
-    borderRadius: "4px",
-    backgroundColor: "#0070f3",
-    color: "#fff",
+  button: {
+    padding: "0.75rem 1.25rem",
+    borderRadius: "20px",
     border: "none",
+    backgroundColor: "#0084ff",
+    color: "white",
     cursor: "pointer",
   },
 };
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>Loading chat...</div>}>
+      <ChatContent />
+    </Suspense>
+  );
+}

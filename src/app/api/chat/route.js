@@ -1,4 +1,4 @@
-// app/api/chat/route.js
+// src/app/api/chat/route.js
 
 export const config = {
   runtime: 'nodejs',
@@ -14,19 +14,22 @@ const openai = new OpenAI({
 
 export async function POST(request) {
   try {
-    // Parse the request body; expect a JSON payload with:
-    // message (user question) and articleUrl.
+    // Expect a JSON payload with message (user question) and articleUrl.
     const { message, articleUrl } = await request.json();
 
     // Query the database for the article by URL.
     const { data: article, error: dbError } = await supabase
-      .from("articles")
-      .select("content, title, author")
-      .eq("url", articleUrl)
+      .from('articles')
+      .select('content, title, author')
+      .eq('url', articleUrl)
       .maybeSingle();
 
-    if (dbError) throw new Error(dbError.message);
-    if (!article) throw new Error('Article not found in the database.');
+    if (dbError) {
+      throw new Error(dbError.message);
+    }
+    if (!article) {
+      throw new Error('Article not found in the database.');
+    }
 
     // Use the content from the database.
     const articleContent = article.content;
@@ -53,7 +56,7 @@ ${articleContent || "No article content available."}`,
       max_tokens: 150,
     });
 
-    // Extract the assistant's response.
+    // Extract and trim the assistant's response.
     const chatResponse = completion.choices[0].message.content.trim();
 
     return new Response(JSON.stringify({ response: chatResponse }), {
