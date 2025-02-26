@@ -1,8 +1,7 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { supabase } from "../lib/supabaseClient"; // adjust path as needed
+import { supabase } from "../lib/supabaseClient"; // adjust path if needed
 
 export default function StoriesDB() {
   const [articles, setArticles] = useState([]);
@@ -13,8 +12,6 @@ export default function StoriesDB() {
     if (error) {
       console.error("Error signing out:", error.message);
     } else {
-      // For example, redirect to the login page or homepage.
-      // You can adjust this as needed.
       window.location.href = "/";
     }
   }
@@ -24,7 +21,6 @@ export default function StoriesDB() {
       try {
         const res = await fetch("/api/articles", { cache: "no-store" });
         const data = await res.json();
-        // We expect the API to return { articles: [...] }
         setArticles(data.articles || []);
       } catch (error) {
         console.error("Error fetching articles from DB:", error);
@@ -51,7 +47,7 @@ export default function StoriesDB() {
         </div>
       </nav>
 
-      {/* Stories container with top margin to account for fixed navbar */}
+      {/* Stories container with grid layout */}
       <div style={styles.container}>
         {articles.map((article, index) => (
           <div key={article.url || index} style={styles.card}>
@@ -117,7 +113,6 @@ const styles = {
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
     zIndex: 1000,
   },
   navbarContent: {
@@ -135,28 +130,28 @@ const styles = {
   },
   logoutButton: {
     padding: "0.5rem 1rem",
-    backgroundColor: "#ff4136",
+    backgroundColor: "#18038b",
     color: "#fff",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
   },
   container: {
-    marginTop: "70px", // Account for the fixed navbar height + some spacing
-    height: "calc(100vh - 70px)",
-    overflowY: "scroll",
+    marginTop: "70px", // Account for the fixed navbar
     padding: "0.5rem",
     backgroundColor: "#f9f9f9",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr", // Two side-by-side columns
+    gap: "1rem", // Gap between columns and rows
+    minHeight: "calc(100vh - 70px)",
   },
   card: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
     backgroundColor: "#fff",
-    marginBottom: "0.5rem",
     padding: "0.5rem",
     borderRadius: "4px",
     boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "row",
   },
   thumbnail: {
     width: "100px",
