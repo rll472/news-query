@@ -200,6 +200,7 @@ const styles = {
     fontSize: "1rem",
     borderRadius: "4px",
     border: "1px solid #ccc",
+    color: "#000"
   },
   formButtons: {
     display: "flex",
