@@ -37,10 +37,10 @@ export default function StoriesDB() {
 
   return (
     <div>
-      {/* Sticky Navbar */}
+      {/* Sticky Navbar with gradient styling */}
       <nav style={styles.navbar}>
         <div style={styles.navbarContent}>
-          <span style={styles.navTitle}>Newsfeed</span>
+          <span style={styles.navTitle}>NewsChat.io</span>
           <button onClick={handleLogout} style={styles.logoutButton}>
             Logout
           </button>
@@ -109,10 +109,8 @@ const styles = {
     left: 0,
     right: 0,
     height: "60px",
-    backgroundColor: "#fff",
+    background: "linear-gradient(to right, #3B82F6, #8B5CF6)", // gradient similar to homepage
     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-    display: "flex",
-    alignItems: "center",
     zIndex: 1000,
   },
   navbarContent: {
@@ -120,29 +118,30 @@ const styles = {
     maxWidth: "1200px",
     margin: "0 auto",
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "space-between", // Title left, Logout right
     alignItems: "center",
     padding: "0 1rem",
   },
   navTitle: {
     fontSize: "1.5rem",
     fontWeight: "bold",
+    color: "#fff",
   },
   logoutButton: {
     padding: "0.5rem 1rem",
-    backgroundColor: "#18038b",
+    backgroundColor: "#3B82F6",
     color: "#fff",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
   },
   container: {
-    marginTop: "70px", // Account for the fixed navbar
+    marginTop: "70px", // To account for the fixed navbar
     padding: "0.5rem",
     backgroundColor: "#f9f9f9",
     display: "grid",
     gridTemplateColumns: "1fr 1fr", // Two side-by-side columns
-    gap: "1rem", // Gap between columns and rows
+    gap: "1rem",
     minHeight: "calc(100vh - 70px)",
   },
   card: {
@@ -200,7 +199,7 @@ const styles = {
     flex: 1,
     padding: "0.4rem 0.8rem",
     fontSize: "0.8rem",
-    backgroundColor: "#00a884",
+    backgroundColor: "#8B5CF6",
     color: "#fff",
     border: "none",
     borderRadius: "4px",
