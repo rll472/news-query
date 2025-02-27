@@ -3,6 +3,29 @@
 import React, { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
+// Reusable Navbar component
+function Navbar() {
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error signing out:", error.message);
+    } else {
+      window.location.href = "/";
+    }
+  }
+
+  return (
+    <nav style={styles.navbar}>
+      <div style={styles.navbarContent}>
+        <span style={styles.navTitle}>NewsChat.io</span>
+        <button onClick={handleLogout} style={styles.logoutButton}>
+          Logout
+        </button>
+      </div>
+    </nav>
+  );
+}
+
 function ChatContent() {
   const searchParams = useSearchParams();
   const articleUrl = searchParams.get("articleUrl") || "";
@@ -92,6 +115,38 @@ function ChatContent() {
 }
 
 const styles = {
+  navbar: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    height: "60px",
+    background: "linear-gradient(to right, #3B82F6, #8B5CF6)",
+    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    zIndex: 1000,
+  },
+  navbarContent: {
+    width: "100%",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "0 1rem",
+  },
+  navTitle: {
+    fontSize: "1.5rem",
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  logoutButton: {
+    padding: "0.5rem 1rem",
+    backgroundColor: "#3B82F6",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+  },
   container: {
     maxWidth: "800px",
     margin: "0 auto",

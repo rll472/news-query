@@ -14,93 +14,63 @@ export async function POST(request) {
     const { article } = payload;
     const url = article.url || article.link;
 
+    console.log("Ingestion attempt:", new Date().toISOString(), url); // Ensure this is here
+
     if (!article || !url) {
-      return new Response(
-        JSON.stringify({ error: "Article data missing or invalid" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: "Article data missing or invalid" }), { status: 400 });
     }
 
-    // Check if the article already exists (using URL as a unique identifier)
     const { data: existing, error: selectError } = await supabase
       .from("articles")
-      .select("id")
+      .select("id, image_url")
       .eq("url", article.url)
       .maybeSingle();
     if (selectError) {
-      console.error(
-        `Error checking article ${article.url}:`,
-        selectError.message
-      );
-      return new Response(
-        JSON.stringify({ error: "Database error while checking article" }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
+      console.error(`Error checking article ${article.url}:`, selectError.message);
+      return new Response(JSON.stringify({ error: "Database error" }), { status: 500 });
     }
     if (existing) {
-      return new Response(
-        JSON.stringify({ message: "Article already exists" }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
-      );
+      console.log(`Article already exists: ${article.url}, image_url: ${existing.image_url}`);
+      return new Response(JSON.stringify({ message: "Article already exists" }), { status: 200 });
     }
 
-    // Extract article content using your helper
     let content = "";
     try {
-      content = await extractAndStoreArticle(article.url);
+      const extracted = await extractAndStoreArticle(article.url);
+      content = extracted && extracted.content ? extracted.content : article.content || "Content extraction failed";
+      console.log("Raw extracted content:", content.length > 0 ? content.slice(0, 200) : "Empty or not a string");
     } catch (extractionError) {
-      console.error(
-        `Error extracting content for ${article.url}:`,
-        extractionError.message
-      );
-      // Optionally, you can choose to skip this article or proceed without content.
+      console.error(`Error extracting content for ${article.url}:`, extractionError.message);
+      content = article.content || "Content extraction failed"; // Fallback to payload content or placeholder
     }
 
-    // Use title and textContent from the payload (if available)
     const { title, textContent } = article;
-    const extractedContent = content || textContent || "";
+    const extractedContent = content || textContent || "Content unavailable"; // Ensure non-empty
+    console.log("Final extractedContent:", extractedContent.slice(0, 200));
+
     const source = new URL(url).hostname;
     const published_at = new Date().toISOString();
     const image_url = article.urlToImage || null;
     console.log("Image URL:", image_url);
 
-    // Insert new article record into the database and destructure the returned data as "inserted"
+    const insertData = { url, title, source, published_at, content: extractedContent, image_url };
+    console.log("Payload sent to Supabase:", JSON.stringify(insertData, null, 2));
     const { data: inserted, error: insertError } = await supabase
       .from("articles")
-      .insert([
-        {
-          url,
-          title,
-          source,
-          published_at,
-          content: extractedContent,
-          image_url,
-        },
-      ]);
+      .insert([insertData])
+      .select();
+
+    console.log("Inserted data from Supabase:", JSON.stringify(inserted, null, 2));
+    console.log("Inserting article with image_url:", image_url);
 
     if (insertError) {
-      console.error(
-        `Error inserting article ${article.url}:`,
-        insertError.message
-      );
-      return new Response(
-        JSON.stringify({ error: insertError.message }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
+      console.error(`Error inserting article ${article.url}:`, insertError.message);
+      return new Response(JSON.stringify({ error: insertError.message }), { status: 500 });
     }
 
-    return new Response(
-      JSON.stringify({
-        message: "Article ingested successfully",
-        inserted,
-      }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ message: "Article ingested successfully", inserted }), { status: 200 });
   } catch (error) {
     console.error("Error in ingestion API route:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }

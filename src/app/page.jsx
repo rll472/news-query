@@ -138,7 +138,7 @@ export default function HomePage() {
           </p>
         </div>
         <div style={styles.benefitCard}>
-          <h3 style={styles.benefitTitle}>Summarrize</h3>
+          <h3 style={styles.benefitTitle}>Summarize</h3>
           <p style={styles.benefitText}>
             Get a summary with the press of a button.
           </p>
