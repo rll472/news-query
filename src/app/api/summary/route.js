@@ -36,7 +36,7 @@ export async function POST(request) {
 
     // Build the prompt for summarization
     // Build the prompt for summarization
-    const prompt = `Summarize the following article with only the most relevant information' :
+    const prompt = `Summarize the following article with only the most relevant information contained in the article.  Include any details that are included in the article that are factual and might be relevant to the story without being redundant.  Include any direct quotes provided by the main characters of the story.' :
     Article Title: ${article.title || context?.articleTitle || "Unknown Title"}
     Article Author: ${article.author || context?.articleAuthor || "Unknown Author"}
     Article Content:

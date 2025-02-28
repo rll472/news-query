@@ -38,7 +38,7 @@ export async function POST(request) {
     const messages = [
       {
         role: 'system',
-        content: `You are a news assistant. The following is the content of a news article. Use only this information to answer the user's question. Do not incorporate any outside knowledge.
+        content: `You are a news assistant. The following is the content of a news article. Use only this information, but all of this information to answer the user's question. Do not incorporate any outside knowledge.
         
 Article:
 ${articleContent || "No article content available."}`,
