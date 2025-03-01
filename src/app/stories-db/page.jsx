@@ -1,9 +1,10 @@
 // src/app/stories-db/page.jsx
-"use client";
-import React, { useState, useEffect } from "react";
-import TransitionAd from "../components/TransitionAd"; // Adjust path if needed
+"use client"; // Mark as Client Component since it uses hooks
 
-export default function StoriesDB() {
+import React, { useState, useEffect } from "react";
+import TransitionAd from "../components/TransitionAd"; // Ensure path is correct
+
+export default function StoriesDB() { // Named export with default
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAd, setShowAd] = useState(false);
@@ -53,7 +54,7 @@ export default function StoriesDB() {
 
   return (
     <div>
-      {/* Sticky Navbar with gradient styling */}
+      {/* Sticky Navbar */}
       <nav style={styles.navbar}>
         <div style={styles.navbarContent}>
           <span style={styles.navTitle}>NewsChat.io</span>
