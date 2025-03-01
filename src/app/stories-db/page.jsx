@@ -6,3 +6,5 @@ export const dynamic = "force-dynamic"; // Ensure dynamic rendering
 export default function StoriesDBPage() {
   return <StoriesClient />;
 }
+
+// Minimal version
