@@ -1,15 +1,17 @@
 // src/app/stories-db/page.jsx
-"use client"; // Mark as Client Component since it uses hooks
+"use client";
 
 import React, { useState, useEffect } from "react";
-import TransitionAd from "../components/TransitionAd"; // Ensure path is correct
+import TransitionAd from "../components/TransitionAd";
 
-export default function StoriesDB() { // Named export with default
+export const dynamic = "force-dynamic"; // Force dynamic rendering
+
+export default function StoriesDB() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAd, setShowAd] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState(null);
-  const [action, setAction] = useState(null); // 'summary' or 'chat'
+  const [action, setAction] = useState(null);
 
   useEffect(() => {
     async function fetchArticles() {
@@ -54,7 +56,6 @@ export default function StoriesDB() { // Named export with default
 
   return (
     <div>
-      {/* Sticky Navbar */}
       <nav style={styles.navbar}>
         <div style={styles.navbarContent}>
           <span style={styles.navTitle}>NewsChat.io</span>
@@ -78,7 +79,6 @@ export default function StoriesDB() { // Named export with default
         </div>
       </nav>
 
-      {/* Stories container with grid layout */}
       <div style={styles.container}>
         {articles.map((article, index) => (
           <div key={article.url || index} style={styles.card}>
