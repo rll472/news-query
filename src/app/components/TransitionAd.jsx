@@ -50,9 +50,15 @@ export default function TransitionAd({ onComplete }) {
       justifyContent: 'center',
       alignItems: 'center',
     }}>
-      {/* AdSense ad */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7048403758820777"
-        crossorigin="anonymous"></script>
+      {/* AdSense ad unit */}
+      <ins
+        className="adsbygoogle"
+        style={{ display: 'block', width: '300px', height: '250px' }} // Adjust size as needed
+        data-ad-client="ca-pub-7048403758820777"
+        data-ad-slot="" // Replace with your ad unit slot ID
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      ></ins>
       <p>Ad ends in {timeLeft} seconds</p>
       {canSkip && (
         <button onClick={onComplete} style={{ padding: '10px 20px', cursor: 'pointer' }}>
