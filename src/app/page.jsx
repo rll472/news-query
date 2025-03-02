@@ -1,9 +1,12 @@
+// src/app/page.jsx
 "use client";
 
 import React, { useState, useEffect } from "react";
-import TransitionAd from "./components/TransitionAd"; // I hope this works
+import TransitionAd from "./components/TransitionAd"; // Adjusted path based on dir structure
 
-export default function StoriesClient() {
+export const dynamic = "force-dynamic";
+
+export default function Home() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAd, setShowAd] = useState(false);
@@ -69,7 +72,7 @@ export default function StoriesClient() {
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.06 1.97.24 2.67.51.73.28 1.34.66 1.95 1.27.61.61.99 1.22 1.27 1.95.27.7.45 1.5.51 2.67.06 1.27.07 1.65.07 4.85 0 3.2-.01 3.58-.07 4.85-.06 1.17-.24 1.97-.51 2.67-.28.73-.66 1.34-1.27 1.95-.61.61-.99 1.22-1.27 1.95-.27.7-.45 1.5-.51 2.67-.06 1.27-.07 1.65-.07 4.85 0 3.2.01 3.58.07 4.85.06 1.17.24 1.97.51 2.67.28.73.66 1.34 1.27 1.95.61.61.99 1.22 1.27 1.95.27.7.45 1.5.51 2.67.06 1.27.07 1.65.07 4.85 0 3.2zm0 2.16c-3.09 0-3.47.01-4.68.07-.99.05-1.67.2-2.26.43-.61.23-1.13.56-1.65 1.08-.52.52-.85 1.04-1.08 1.65-.23.59-.38 1.27-.43 2.26-.06 1.21-.07 1.59-.07 4.68 0 3.09.01 3.47.07 4.68.05.99.2 1.67.43 2.26.23.61.56 1.13 1.08 1.65.52.52 1.04.85 1.65 1.08.59.23 1.27.38 2.26.43 1.21.06 1.59.07 4.68.07 3.09 0 3.47-.01 4.68-.07.99-.05 1.67-.2 2.26-.43.61-.23 1.13-.56 1.65-1.08.52-.52.85-1.04 1.08-1.65.23-.59.38-1.27.43-2.26.06-1.21.07-1.59.07-4.68 0-3.09-.01-3.47-.07-4.68-.05-.99-.2-1.67-.43-2.26-.23-.61-.56-1.13-1.08-1.65-.52-.52-1.04-.85-1.65-1.08-.59-.23-1.27-.38-2.26-.43-1.21-.06-1.59-.07-4.68-.07zm0 5.83a6.01 6.01 0 100 12.02 6.01 6.01 0 000-12.02zm0 9.86a3.85 3.85 0 110-7.7 3.85 3.85 0 010 7.7zm6.28-10.14a1.41 1.41 0 11-2.82 0 1.41 1.41 0 012.82 0z" fill="#fff"/>
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.536-11.464a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-3.536 1.464c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" fill="#fff"/>
               </svg>
             </a>
           </div>
@@ -132,7 +135,7 @@ const styles = {
     right: 0,
     height: "60px",
     background: "linear-gradient(to right, #3B82F6, #8B5CF6)",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     zIndex: 1000,
   },
   navbarContent: {

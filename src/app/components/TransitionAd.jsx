@@ -55,7 +55,7 @@ export default function TransitionAd({ onComplete }) {
         className="adsbygoogle"
         style={{ display: 'block', width: '300px', height: '250px' }} // Adjust size as needed
         data-ad-client="ca-pub-7048403758820777"
-        data-ad-slot="" // Replace with your ad unit slot ID
+        data-ad-slot="1953459503" // Replace with your ad unit slot ID
         data-ad-format="auto"
         data-full-width-responsive="true"
       ></ins>
