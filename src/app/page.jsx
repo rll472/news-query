@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import TransitionAd from "./components/TransitionAd";
+import TransitionAd from "./components/TransitionAd"; // I hope this works
 
 export default function StoriesClient() {
   const [articles, setArticles] = useState([]);
