@@ -1,6 +1,9 @@
 // src/app/page.jsx
 "use client";
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7048403758820777"
+     crossorigin="anonymous"></script>
+
 import React, { useState, useEffect } from "react";
 import Head from "next/head"; // Add this import
 import TransitionAd from "./components/TransitionAd";
