@@ -1,4 +1,3 @@
-// src/app/page.jsx
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -15,111 +14,89 @@ export default function Home() {
         <title>NewsChat.io - Your AI-Powered News Companion</title>
         <meta
           name="description"
-          content="Discover NewsChat.io, an interactive platform offering AI-powered news summaries and chats."
+          content="Discover NewsChat.io, an interactive platform offering AI-powered news summaries, chat-based exploration, and access to original articles."
         />
       </Head>
       <div>
+        {/* Navbar (unchanged) */}
         <nav style={styles.navbar}>
           <div style={styles.navbarContent}>
             <span style={styles.navTitle}>NewsChat.io</span>
             <div style={styles.socialLinks}>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-                    fill="#fff"
-                  />
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#fff" />
                 </svg>
               </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 5.01 3.67 9.16 8.47 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.24 0-1.63.77-1.63 1.56v1.88h2.77l-.44 2.89h-2.33v6.99c4.8-.72 8.47-4.87 8.47-9.88 0-5.5-4.46-9.96-9.96-9.96z"
-                    fill="#fff"
-                  />
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 5.01 3.67 9.16 8.47 9.88v-6.99h-2.54v-2.89h2.54v-2.2c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.25c-1.24 0-1.63.77-1.63 1.56v1.88h2.77l-.44 2.89h-2.33v6.99c4.8-.72 8.47-4.87 8.47-9.88 0-5.5-4.46-9.96-9.96-9.96z" fill="#fff" />
                 </svg>
               </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={styles.socialLink}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.536-11.464a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-3.536 1.464c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z"
-                    fill="#fff"
-                  />
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" style={styles.socialLink}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.536-11.464a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-3.536 1.464c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3z" fill="#fff" />
                 </svg>
               </a>
             </div>
           </div>
         </nav>
-        <div style={landingStyles.container}>
-          <h1 style={landingStyles.title}>Welcome to NewsChat.io</h1>
-          <p style={landingStyles.subtitle}>
-            Experience news like never before with our interactive AI-powered
-            platform.
+
+        {/* Hero Section */}
+        <section style={landingStyles.hero}>
+          <h1 style={landingStyles.heroTitle}>Welcome to NewsChat.io</h1>
+          <p style={landingStyles.heroSubtitle}>
+            Your AI-powered companion for smarter news consumption.
           </p>
+          <Link href="/news" style={landingStyles.ctaButton}>
+            Explore Now
+          </Link>
+        </section>
+
+        {/* What We Do Section */}
+        <section style={landingStyles.whatWeDo}>
+          <h2 style={landingStyles.sectionTitle}>What is NewsChat.io?</h2>
+          <p style={landingStyles.sectionText}>
+            NewsChat.io is an innovative platform designed to revolutionize how you interact with news. Our mission is to make staying informed quick, engaging, and personalized. With NewsChat.io, you get more than just headlines—you get a dynamic newsfeed powered by artificial intelligence that adapts to your preferences and curiosity.
+          </p>
+          <p style={landingStyles.sectionText}>
+            Here’s how it works: browse our curated newsfeed, updated in real-time with stories from trusted sources worldwide. For each article, you have three powerful options. First, request an <strong>AI-generated summary</strong> to get the key points in seconds—perfect for when you’re short on time. Second, engage with our <strong>AI chat feature</strong> to ask questions about the story, from clarifying details to exploring related topics. Third, dive into the <strong>original article</strong> for the full experience, all seamlessly linked within the platform.
+          </p>
+          <p style={landingStyles.sectionText}>
+            Whether you’re a busy professional needing quick updates, a curious reader wanting deeper insights, or someone who loves staying ahead of the news cycle, NewsChat.io has you covered. Our AI technology ensures summaries are concise yet comprehensive, while the chat feature lets you explore news on your terms. Plus, our platform is designed to be intuitive, visually appealing, and accessible across devices, so you can stay informed wherever you are.
+          </p>
+        </section>
+
+        {/* Features Section */}
+        <section style={landingStyles.featuresContainer}>
+          <h2 style={landingStyles.sectionTitle}>Why Choose NewsChat.io?</h2>
           <div style={landingStyles.features}>
             <div style={landingStyles.featureCard}>
-              <h2 style={landingStyles.featureTitle}>Instant AI Summaries</h2>
+              <h3 style={landingStyles.featureTitle}>Instant AI Summaries</h3>
               <p style={landingStyles.featureText}>
-                Get quick, accurate summaries of news articles powered by
-                advanced AI.
+                Save time with concise, accurate summaries of any article, powered by cutting-edge AI.
               </p>
             </div>
             <div style={landingStyles.featureCard}>
-              <h2 style={landingStyles.featureTitle}>Engage with AI Chat</h2>
+              <h3 style={landingStyles.featureTitle}>Interactive AI Chat</h3>
               <p style={landingStyles.featureText}>
-                Dive deeper into stories with our interactive AI chat feature.
+                Ask questions and explore stories deeper with our smart AI companion.
               </p>
             </div>
             <div style={landingStyles.featureCard}>
-              <h2 style={landingStyles.featureTitle}>Stay Informed</h2>
+              <h3 style={landingStyles.featureTitle}>Real-Time Newsfeed</h3>
               <p style={landingStyles.featureText}>
-                Access a curated newsfeed updated in real-time.
+                Stay updated with a curated feed of the latest news from around the globe.
               </p>
             </div>
           </div>
-          <Link href="/news" style={landingStyles.ctaButton}>
-            Start Exploring News
-          </Link>
-        </div>
+        </section>
       </div>
     </>
   );
 }
 
-// Reuse navbar styles from newsfeed
+// Navbar styles (unchanged)
 const styles = {
   navbar: {
     position: "fixed",
@@ -157,59 +134,94 @@ const styles = {
   },
 };
 
-// Landing page-specific styles
+// Updated landing page styles
 const landingStyles = {
-  container: {
-    marginTop: "70px",
-    padding: "2rem",
-    backgroundColor: "#f9f9f9",
-    minHeight: "calc(100vh - 70px)",
+  hero: {
+    marginTop: "60px",
+    padding: "4rem 2rem",
+    background: "linear-gradient(to bottom, #3B82F6, #ffffff)",
+    textAlign: "center",
+    color: "#fff",
+    minHeight: "50vh",
     display: "flex",
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
+  },
+  heroTitle: {
+    fontSize: "3rem",
+    fontWeight: "bold",
+    marginBottom: "1rem",
+    textShadow: "0 2px 4px rgba(0,0,0,0.2)",
+  },
+  heroSubtitle: {
+    fontSize: "1.5rem",
+    marginBottom: "2rem",
+    maxWidth: "600px",
+  },
+  whatWeDo: {
+    padding: "3rem 2rem",
+    backgroundColor: "#f9f9f9",
     textAlign: "center",
   },
-  title: {
-    fontSize: "2.5rem",
-    marginBottom: "1rem",
+  sectionTitle: {
+    fontSize: "2rem",
+    fontWeight: "bold",
     color: "#333",
+    marginBottom: "1.5rem",
   },
-  subtitle: {
-    fontSize: "1.2rem",
-    marginBottom: "2rem",
+  sectionText: {
+    fontSize: "1.1rem",
     color: "#666",
+    maxWidth: "800px",
+    margin: "0 auto 1rem",
+    lineHeight: "1.6",
+  },
+  featuresContainer: {
+    padding: "3rem 2rem",
+    backgroundColor: "#fff",
+    textAlign: "center",
   },
   features: {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-    gap: "1rem",
-    maxWidth: "1000px",
-    marginBottom: "2rem",
+    gap: "2rem",
+    maxWidth: "1200px",
+    margin: "0 auto",
   },
   featureCard: {
     backgroundColor: "#fff",
-    padding: "1rem",
-    borderRadius: "4px",
-    boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
+    padding: "1.5rem",
+    borderRadius: "8px",
+    boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+    transition: "transform 0.3s",
+    ":hover": {
+      transform: "translateY(-5px)",
+    },
   },
   featureTitle: {
-    fontSize: "1.2rem",
-    marginBottom: "0.5rem",
-    color: "#0070f3",
+    fontSize: "1.3rem",
+    fontWeight: "600",
+    color: "#3B82F6",
+    marginBottom: "0.75rem",
   },
   featureText: {
-    fontSize: "0.9rem",
-    color: "#666",
+    fontSize: "1rem",
+    color: "#555",
+    lineHeight: "1.5",
   },
   ctaButton: {
-    padding: "0.8rem 1.5rem",
-    fontSize: "1rem",
+    padding: "1rem 2rem",
+    fontSize: "1.1rem",
     backgroundColor: "#8B5CF6",
     color: "#fff",
     border: "none",
-    borderRadius: "4px",
+    borderRadius: "6px",
     textDecoration: "none",
     cursor: "pointer",
     transition: "background-color 0.3s",
+    ":hover": {
+      backgroundColor: "#7C3AED",
+    },
   },
 };
