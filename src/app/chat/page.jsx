@@ -81,7 +81,7 @@ function ChatContent() {
   return (
     <div style={styles.container}>
       <Navbar />
-      <Link href="/" style={styles.backLink}>
+      <Link href="/news" style={styles.backLink}>
         Back to Stories
       </Link>
       <div style={styles.chatContainer}>
