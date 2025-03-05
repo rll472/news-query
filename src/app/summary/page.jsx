@@ -80,7 +80,7 @@ function SummaryContent() {
       )}
       {/* "Ask a question" button and "Back to Stories" link */}
       <div style={styles.buttonWrapper}>
-        <Link href="/" style={styles.backLink}>
+        <Link href="/news" style={styles.backLink}>
           Back to Stories
         </Link>
         <Link
