@@ -45,9 +45,9 @@ export async function POST(request) {
 
     // Call OpenAI's Chat Completions API
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-2024-08-06",
       messages: [{ role: "system", content: prompt }],
-      max_tokens: 150,
+      max_tokens: 250,
     });
 
     const summary = completion.choices[0].message.content.trim();
