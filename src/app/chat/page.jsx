@@ -141,7 +141,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 1rem",
+    padding: "0 0rem",
   },
   navTitle: {
     fontSize: "1.5rem",
