@@ -204,7 +204,7 @@ const styles = {
   },
   userBubble: {
     alignSelf: "flex-end",
-    backgroundColor: "#0084ff",
+    backgroundColor: "#8B5CF6",
     color: "white",
     padding: "0.75rem 1rem",
     borderRadius: "16px",
@@ -234,7 +234,7 @@ const styles = {
     padding: "0.75rem 1.25rem",
     borderRadius: "20px",
     border: "none",
-    backgroundColor: "#0084ff",
+    backgroundColor: "#8B5CF6",
     color: "white",
     cursor: "pointer",
   },

@@ -173,4 +173,11 @@ const styles = {
     cursor: "pointer",
     transition: "background-color 300ms",
   },
+  summaryText: {  // Added new style for the summary text
+    fontFamily: 'Arial', // Example: Change to Arial
+    fontSize: '1.1rem',         // Optional:  Adjust the font size as well
+    lineHeight: '1.6',       // Optional: Improve readability
+    color: '#333'          // Optional: Adjust text color
+  }
+
 };

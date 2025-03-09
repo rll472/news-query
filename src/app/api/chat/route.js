@@ -4,13 +4,12 @@ export const config = {
   runtime: 'nodejs',
 };
 
-import { OpenAI } from 'openai';
+import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
 import { supabase } from '../../lib/supabaseClient';
 
-// Initialize the OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize the Gemini client
+const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = gemini.getGenerativeModel({ model: "gemini-2.0-flash-lite"}); // Or "gemini-1.5-pro"
 
 export async function POST(request) {
   try {
@@ -34,53 +33,19 @@ export async function POST(request) {
     // Use the content from the database.
     const articleContent = article.content;
 
-    // **START:  Summarization Logic (Adapted from your summary API)**
+    // **REMOVED: Summarization Logic**  No longer needed
 
-    // Build the prompt for summarization, grabbing the prompt from the summary api.
-    const prompt = `Summarize the following article with only the most relevant information contained in the article.  Include any details that are included in the article that are factual and might be relevant to the story without being redundant.  Include any direct quotes provided by the main characters of the story.' :
-    Article Title: ${article.title || "Unknown Title"}
-    Article Author: ${article.author || "Unknown Author"}
-    Article Content:
-    ${articleContent || "No article content available."}`;
+    // Build the prompt for the Chat Completions API using the full article
+    const chatPrompt = `You are a news assistant. The following is the full text of a news article. Use ONLY this article content to answer the user's question. Do not use any external knowledge. Take notice of the people and/or organizations discussed or mentioned, and be prepared to answer questions about them. If there is a quote inside "", take note of what was said and who said it. If the answer cannot be found within the article, please respond, "I'm sorry, but I could not find the answer to your question in the article. Please rephrase your question or check the article for more information."
 
+    Article:
+    ${articleContent || "No article content available."}
 
-    // Call OpenAI's Chat Completions API
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-2024-08-06",
-      messages: [{ role: "system", content: prompt }],
-      max_tokens: 250,
-    });
+    User Question: ${message}`;
 
-    const summary = completion.choices[0].message.content.trim();
-    // **END: Summarization Logic**
-
-    // Use the summary as the article content for the chat.
-    const summarizedArticleContent = summary;
-
-    // Build the messages array for the Chat Completions API.
-    const messages = [
-      {
-        role: 'system',
-        content: `You are a news assistant. The following is a summary of a news article. Use only this summary, to answer the user's question. Take notice of the people and / or organizations discussed or mentioned, and be prepared to answer questions about them.  If there is a quote inside "", take note of what was said and who said it.  Do not incorporate any outside knowledge.
-        
-Summary:
-${summarizedArticleContent || "No article content available."}`,
-      },
-      {
-        role: 'user',
-        content: message,
-      },
-    ];
-
-    // Call the Chat Completions API.
-    const completion2 = await openai.chat.completions.create({
-      model: 'gpt-4o-2024-08-06',
-      messages,
-      max_tokens: 150,
-    });
-
-    // Extract and trim the assistant's response.
-    const chatResponse = completion2.choices[0].message.content.trim();
+    // Call the Gemini API for Chat
+    const chatResult = await model.generateContent(chatPrompt);
+    const chatResponse = chatResult.response.text();
 
     return new Response(JSON.stringify({ response: chatResponse }), {
       status: 200,

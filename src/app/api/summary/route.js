@@ -1,17 +1,16 @@
 // app/api/summary/route.ts
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { supabase } from "../../lib/supabaseClient";
 
 export const config = {
   runtime: "nodejs",
 };
 
-//import { NextRequest } from "next/server"; *Commented out until you need to use
-import { OpenAI } from "openai";
-import { supabase } from "../../lib/supabaseClient";
+// Initialize Google Generative AI client
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Replace with the actual Gemini model name if this doesn't work
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
 export async function POST(request) {
   try {
@@ -21,12 +20,11 @@ export async function POST(request) {
 
     // Query the database for the article by URL
     const { data: article, error: dbError } = await supabase
-    .from("articles")
-    .select("content, title, author")
-    .eq("url", articleUrl)
-    .maybeSingle();
+      .from("articles")
+      .select("content, title, author")
+      .eq("url", articleUrl)
+      .maybeSingle();
     console.log("Database article:", article);
-
 
     if (dbError) throw new Error(dbError.message);
     if (!article) throw new Error("Article not found in the database.");
@@ -35,22 +33,16 @@ export async function POST(request) {
     const articleContent = article.content;
 
     // Build the prompt for summarization
-    // Build the prompt for summarization
     const prompt = `Summarize the following article with only the most relevant information contained in the article.  Include any details that are included in the article that are factual and might be relevant to the story without being redundant.  Include any direct quotes provided by the main characters of the story.' :
     Article Title: ${article.title || context?.articleTitle || "Unknown Title"}
     Article Author: ${article.author || context?.articleAuthor || "Unknown Author"}
     Article Content:
     ${articleContent || "No article content available."}`;
 
-
-    // Call OpenAI's Chat Completions API
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-2024-08-06",
-      messages: [{ role: "system", content: prompt }],
-      max_tokens: 250,
-    });
-
-    const summary = completion.choices[0].message.content.trim();
+    // Call Gemini's generateContent API
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const summary = response.text();
 
     return new Response(JSON.stringify({ summary }), {
       status: 200,
