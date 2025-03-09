@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import styles from "../page.module.css"; // Make sure this import is still present!
+import styles from "../page.module.css"; 
 
 export const dynamic = "force-dynamic";
 
