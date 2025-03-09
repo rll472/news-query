@@ -4,7 +4,7 @@ export const config = {
   runtime: 'nodejs',
 };
 
-import { GenerativeModel, GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { supabase } from '../../lib/supabaseClient';
 
 // Initialize the Gemini client
