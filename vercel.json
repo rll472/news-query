@@ -1,8 +1,7 @@
 {
-    "rewrites": [
-      {
-        "source": "/news",
-        "destination": "/news"
-      }
-    ]
-  }
+  "rewrites": [
+    { "source": "/news", "destination": "/news" },
+    { "source": "/news/", "destination": "/news" },
+    { "source": "/api/:path*", "destination": "/api/:path*" }
+  ]
+}
